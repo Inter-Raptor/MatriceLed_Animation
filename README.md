@@ -99,6 +99,26 @@ Une fois le montage terminé, alimentez votre matrice LED et vérifiez que votre
 si vous avez bien entré vos info de connection wifi et la pin utiliser pour la matrice led celle ci devrais afficher des annimation!
 ## Bravo
 Vous pouvez maintenant utiliser l'interface web pour contrôler les paramètres de l'animation, tels que le nombre de répétitions, le délai entre les animations, la luminosité et la durée de chaque frame. Pour accéder à l'interface web, connectez votre ordinateur ou votre smartphone au même réseau Wi-Fi que l'ESP32 et entrez l'adresse IP de l'ESP32 (affichée dans le moniteur série) dans un navigateur web.
+* pour afficher l'interface WEB 
+	* Connectez votre ordinateur, smartphone ou tablette au même réseau Wi-Fi que l'ESP32.
+	
+	* Ouvrez un navigateur web sur votre ordinateur, smartphone ou tablette.
+	
+	* Dans la barre d'adresse du navigateur, entrez l'adresse IP statique de l'ESP32 : http://192.168.1.28
+	
+	* Vous devriez maintenant voir l'interface web avec un formulaire pour modifier les paramètres de la matrice de LEDs. Les paramètres incluent :
+	
+	Nombre de répétitions
+	Délai entre les animations (en ms)
+	Luminosité (0-255)
+	Durée de chaque frame (en ms)
+	Pour modifier un paramètre, saisissez la nouvelle valeur dans le champ correspondant. Par exemple, pour modifier le nombre de répétitions, entrez la nouvelle valeur dans le champ "Number of repetitions".
+	
+	Une fois que vous avez apporté les modifications souhaitées, cliquez sur le bouton "Submit" pour envoyer les nouvelles valeurs à l'ESP32.
+	
+	Les paramètres de la matrice de LEDs devraient maintenant être mis à jour avec les nouvelles valeurs que vous avez saisies. L'ESP32 ajustera automatiquement les animations en fonction de ces paramètres.
+	
+	Vous pouvez revenir à l'interface web à tout moment pour ajuster les paramètres en suivant les étapes 3 à 7. Les modifications seront automatiquement appliquées à l'ESP32 et à la matrice de LEDs.
 
 # Matrice Led Animation (création du boitier)
 
@@ -108,4 +128,45 @@ bientot developer
 # Matrice Led Animation (Modifier les annimation)
 
   ## comment crer ses propre animation
-bientot developer
+Dans ce tutoriel, nous allons voir comment créer des images de 16x16 pixels pour une matrice LED en utilisant le site Pixilart et le logiciel lcd-image-converter.
+
+* Étape 1 : Créer des images 16x16 pixels
+
+Rendez-vous sur le site https://www.pixilart.com/.
+Créez des images de 16x16 pixels et téléchargez-les sur votre ordinateur.
+
+* Étape 2 : Télécharger et installer lcd-image-converter
+
+Téléchargez lcd-image-converter depuis https://lcd-image-converter.riuson.com/.
+Installez le logiciel et ouvrez-le.
+
+* Étape 3 : Convertir l'image en code hexadécimal
+
+Dans lcd-image-converter, ouvrez l'image de 16x16 pixels que vous avez créée précédemment.
+Allez dans Options > Conversion.
+En haut de la fenêtre, sélectionnez "Color A8R8G8B8" dans le menu déroulant.
+
+Dans l'onglet "Prepare", cochez "Use custom script".
+Copiez et collez le code suivant dans la zone de texte du script :
+arduino
+Copy code
+```
+for (var y = 0; y < image.height; y++) {
+  if (y % 2 == 0) {
+    // even rows (0, 2, 4, ...)
+    for (var x = image.width - 1; x >= 0; x--) {
+      image.addPoint(x, y);
+    }
+  } else {
+    // odd rows (1, 3, 5, ...)
+    for (var x = 0; x < image.width; x++) {
+      image.addPoint(x, y);
+    }
+  }
+}
+```
+Cliquez sur "OK" pour valider les paramètres.
+Retournez dans Options > Conversion et cliquez sur le bouton "Show preview" en bas à droite.
+Une fenêtre s'ouvre avec le code hexadécimal de l'image, que nous utiliserons pour notre animation.
+Répétez ces étapes pour chaque image constituant les différentes frames de l'animation. Une fois que vous avez obtenu tous les codes hexadécimaux, vous pouvez les intégrer dans votre projet de matrice LED pour afficher vos animations personnalisées.
+
